@@ -1,0 +1,11 @@
+@import "~bootstrap/scss/bootstrap";
+$background_color:#db524d;
+#root{
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $background_color;
+    overflow: hidden;
+}

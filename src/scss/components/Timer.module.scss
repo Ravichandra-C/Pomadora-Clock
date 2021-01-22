@@ -1,0 +1,30 @@
+.timerInput{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.increase{
+    width: 0px;
+    height: 0px;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 40px solid black;
+}
+.decrease{
+    width: 0px;
+    height: 0px;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-top: 40px solid black;
+
+}
+.number{
+    height: 40px;
+    width: 80px;
+    padding: 5px;
+    margin: 10px 0px;
+    appearance: textfield;
+    text-align: center;
+    font-size: 35px;
+}

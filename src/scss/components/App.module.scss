@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import "../_variables";
+.app{
+    width: 900px;
+    height: 700px;
+    display: grid;
+    grid-template-rows: 10% 80% 10%;
+    grid-template-columns: 50% 50%;
+    grid-template-areas: "logo settings"
+                        "main main"
+                        "footer footer";
+}
+.title{
+    font-family: 'Roboto', sans-serif;
+    color: $text_color;
+    grid-area: logo;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.options{
+    cursor: pointer;
+    grid-area: settings;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    color: $text_color;
+    
+    button{
+        background-color: $light_bg;
+        border: 0px;
+    }
+}
+.main{
+    grid-area: main;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+} 
+.timer{
+        width: 500px;
+        height: 400px;
+        background-color: $light_bg;
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows:15% 65% 20%;
+        grid-template-areas: "label label"
+                    "clock clock"
+                    "controls controls";
+}
+.clockLabel{
+    grid-area: label;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: "Roboto",sans-serif;
+    color: $text_color;
+}
+.clock{
+    grid-area: clock;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.time{
+    font-family: 'Roboto', sans-serif;
+    // font-family: 'PT Serif', serif;
+    font-size: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $text_color;
+}
+.minutes{
+}
+.colon{
+    animation-name: blink;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function:ease;
+    
+}
+.seconds{
+}
+@keyframes blink{
+  0% {
+    visibility: hidden;
+  }
+  50%{
+      visibility:hidden;
+  }
+  
+  100% {
+    visibility: visible;
+  }
+}
+
+.controls{
+    grid-area: controls;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    button{
+        background-color: $text_color;
+        border-width: 0px;
+        color: $background_color;
+        font-size: xx-large;
+        padding: 0px;
+        margin: 12px 25px 12px 25px;
+    }
+    button:hover{
+        background-color: $text_color;
+        color: $background_color;
+    }
+}
+
+.timerLabel,.breakLabel{
+    padding: 5px 15px;
+    background-color:$background_color;
+    border-radius: 5px;
+}

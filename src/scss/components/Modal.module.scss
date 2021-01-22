@@ -1,0 +1,38 @@
+@import "../_variables";
+.modal{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 95vh;
+    z-index: 1000;
+    background-color: black;
+    opacity: .95;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main{
+    min-width: 500px;
+    min-height: 300px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 20% 80%;
+    grid-template-areas: "timerlabel breaklabel"
+                "timerinput breakinput";
+    background-color: white;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+.timerLab{
+    grid-area: timerlabel;
+    text-align: center;
+}
+.breakLabel{
+    grid-area: breaklabel;
+    text-align: center;
+}
+.timerInput{
+    grid-area: timerinput;
+}
