@@ -1,19 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStopwatch,faCog} from '@fortawesome/free-solid-svg-icons'
 import styles from "../scss/components/App.module.scss"
+import {useSelector} from "react-redux"
 import Modal from "./Modal"
 export default function App(){
-
-    function showModal(event){
-        console.log(event.currentTarget);
-        document.getElementById(event.currentTarget.dataset.target).hidden=false;
-    }
+    const [showModal,setShowModal]=useState(false);
+    const timerTime=useSelector(state=>state.timer);
+    const breakTime=useSelector(state=>state.break);
 
     return (
         <div className={styles.app}>
             <h2 className={styles.title}><FontAwesomeIcon icon={faStopwatch} /> &nbsp;Pomotimer</h2>
-            <div className={styles.options}><button onClick={showModal} data-toggle="modal" data-target="exampleModal" className='settings btn-primary btn'><span className="desktop">Settings&nbsp;</span><FontAwesomeIcon icon={faCog}/></button></div>
+            <div className={styles.options}><button onClick={()=>{setShowModal(true)}} data-toggle="modal" data-target="exampleModal" className='settings btn-primary btn'><span className="desktop">Settings&nbsp;</span><FontAwesomeIcon icon={faCog}/></button></div>
             <div className={styles.main}>
                 <div className={styles.timer}>
                     <div className={styles.clockLabel}>
@@ -30,7 +29,7 @@ export default function App(){
               </div>
                
             </div>
-        <Modal/>
+        {(showModal?<Modal close={setShowModal}/>:null)}
         </div>
     )
 }
