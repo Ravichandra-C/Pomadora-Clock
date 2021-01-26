@@ -4,6 +4,7 @@ import { faStopwatch,faCog} from '@fortawesome/free-solid-svg-icons'
 import styles from "../scss/components/App.module.scss"
 import {useDispatch, useSelector} from "react-redux"
 import {setAppTimer,setAppBreakTimer} from "../slices/AppSlice"
+import alarm from "../alarm-sound.mp3"
 import Modal from "./Modal"
 export default function App(){
     const [showModal,setShowModal]=useState(false);
@@ -22,6 +23,7 @@ export default function App(){
         dispatch(setAppBreakTimer(breakTime));
         setbort(false);
         startStopTimer(false);
+        new Audio(alarm).play();
     }
 
     function decrementBreakTimer(){
