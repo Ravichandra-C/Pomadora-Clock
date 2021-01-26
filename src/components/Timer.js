@@ -2,7 +2,6 @@ import React,{useState} from "react"
 import style from "../scss/components/Timer.module.scss"
 export default function(props){
 const [value,setValue]=useState(props.value);
-console.log(props);
 function dispatchVal(value){
     setValue(value);
     props.setVal(value)

@@ -14,7 +14,6 @@ let timeSlice=createSlice({
    } ,
    reducers:{
        setTimer:function(state,action){
-           console.log("Set timer invoked "+action)
            state.timer=action.payload;
        },
         setBreak:function(state,action){

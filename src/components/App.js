@@ -1,72 +1,95 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStopwatch,faCog} from '@fortawesome/free-solid-svg-icons'
 import styles from "../scss/components/App.module.scss"
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
+import {setAppTimer,setAppBreakTimer} from "../slices/AppSlice"
 import Modal from "./Modal"
 export default function App(){
     const [showModal,setShowModal]=useState(false);
-    const timerTime=useSelector(state=>state.timer);
-    const breakTime=useSelector(state=>state.break);
+    const timerTime=useSelector(state=>state.timerSlice.timer);
+    const breakTime=useSelector(state=>state.timerSlice.break);
     const [timerRunning,startStopTimer]=useState(false);
-    const [clock,setClock]=useState(timerTime);
-    const [breakT,setBreak]=useState(breakTime);
+    let clock=useSelector(state=>state.AppSlice.apptimer);
+    let breakT=useSelector(state=>state.AppSlice.appbreaktimer);
     const [intervalId,setTntrId]=useState();
     const [bort,setbort]=useState(false)
+    const dispatch=useDispatch();   
 
     function handleReset(){
-        setClock(timerTime);
-        setBreak(breakTime);
+        clearInterval(intervalId);
+        dispatch(setAppTimer(timerTime));
+        dispatch(setAppBreakTimer(breakTime));
         setbort(false);
         startStopTimer(false);
-        clearInterval(intervalId);
     }
 
-    function handleStartClick(){
-        startStopTimer(true);
-        let timeInSec
-        if(bort){
-            timeInSec=breakT.min*60*1000+breakT.sec*1000;
+    function decrementBreakTimer(){
+        console.log("****decrementBreakTimer****")
+        let timeToBreakInSec = breakT.min * 60 * 1000 + breakT.sec * 1000;
+        console.log("min "+clock.min+" sec "+clock.sec);
+        let endBreakDate=new Date().getTime()+timeToBreakInSec;
+        if(intervalId){
+            clearInterval(intervalId);
         }
-        else{
-
-            timeInSec=clock.min*60*1000+clock.sec*1000;
-        }
-        let endDate=new Date().getTime()+timeInSec;
-        console.log(endDate)
-        let intervalId=setInterval(()=>{
-           console.log(endDate);
-            timeInSec=endDate-new Date().getTime();
-            timeInSec/=1000;
-            console.log(timeInSec);
-            if(bort){
-                setBreak({
+        let intervId=setInterval(
+            function brktick(){
+                let timeInSec = endBreakDate - new Date().getTime();
+                timeInSec/=1000;
+                 dispatch(setAppBreakTimer({
                     min:Math.floor(timeInSec/60),
                     sec:Math.floor(timeInSec%60)
-                });
+                }));
                 if(timeInSec<=0){
+                    clearInterval(intervId);
                     handleReset();
                 }
+            }, 1000
+        )
+
+        setTntrId(intervId);
+    }
+
+    useEffect(()=>{
+        if(!bort){
+             if (clock.min <= 0&&clock.sec<=0 && !bort&&timerRunning) {
+                setbort(true);
+                decrementBreakTimer();
             }
-            else{
-                setClock({
-                    min:Math.floor(timeInSec/60),
-                    sec:Math.floor(timeInSec%60)
-                })
-                if(timeInSec<=0){
-                    setbort(true);
-                }
-            }
-            
+        }
+    })
+    function handleStartClick(){
+        startStopTimer(true);
+        let timeInSec;
+
+        let timeToTimerInSec = clock.min * 60 * 1000 + clock.sec * 1000;
+        let endDate = new Date().getTime() + timeToTimerInSec;
+        if(bort){
+            decrementBreakTimer();
+            return;
+        }
+        let intervalId=setInterval(function tick(){
+            timeInSec = endDate - new Date().getTime();
+            let brkt=(timeInSec<=0)?true:false;
+            timeInSec/=1000;
+            dispatch(setAppTimer({
+                min: Math.floor(timeInSec / 60),
+                sec: Math.floor(timeInSec % 60)
+            }));
+           
+
+          
         },1000);
         setTntrId(intervalId);
     }
 
     function handleStopClick(){
        startStopTimer(false);
-       console.log(intervalId);
         clearInterval(intervalId);
     }
+    let minVal=bort?breakT.min:clock.min
+    let secVal=bort?breakT.sec:clock.sec
+    console.log("MinVal "+minVal+" SecVal; "+secVal);
     return (
         <div className={styles.app}>
             <h2 className={styles.title}><FontAwesomeIcon icon={faStopwatch} /> &nbsp;Pomotimer</h2>
@@ -74,11 +97,11 @@ export default function App(){
             <div className={styles.main}>
                 <div className={styles.timer}>
                     <div className={styles.clockLabel}>
-                        <div className={styles.timerLabel}>Timer</div>
-                        <div className={styles.breakLabel}>Break</div>
+                        <div className={bort?null:styles.timerLabel}>Timer</div>
+                        <div className={bort?styles.breakLabel:null}>Break</div>
                     </div>
                     <div className={styles.clock}>
-                        <div className={styles.time}><span className={styles.minutes}>{clock.min}</span><span className={styles.colon}>:</span><span className={styles.seconds}>{clock.sec}</span></div>
+                        <div className={styles.time}><span className={styles.minutes}>{minVal}</span><span className={styles.colon}>:</span><span className={styles.seconds}>{secVal}</span></div>
                     </div>
                     <div className={styles.controls}>
                         {(timerRunning)?<button className='btn btn-primary' onClick={handleStopClick}>Pause</button>:<button className='btn btn-primary' onClick={handleStartClick}>Start</button>}

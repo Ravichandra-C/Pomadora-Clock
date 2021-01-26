@@ -3,19 +3,23 @@ import style from "../scss/components/Modal.module.scss"
 import AdjustTimer from "./AdjustTime"
 import {useSelector,useDispatch} from "react-redux"
 import {setBreak,setTimer} from "../slices/time"
+import {setAppTimer,setAppBreakTimer} from "../slices/AppSlice"
 import {faTimesCircle} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function Modal(props){
-    let timerState = useSelector(state => state.timer);
+    let timerState = useSelector(state => state.timerSlice.timer);
+    let breakTimerState=useSelector(state=>state.timerSlice.break);
     const dispatch = useDispatch();
     const [timer,setTimerState]=useState(timerState)
-    const [breakTimer,setBreakTimer]=useState(useSelector(state=>state.break))
+    const [breakTimer,setBreakTimer]=useState(breakTimerState)
     function handleTimerChange(obj){
         setTimerState(obj);
         dispatch(setTimer(obj));
+        dispatch(setAppTimer(obj));
     }
     function handleBreakChange(obj){
         setBreakTimer(obj);
+        dispatch(setAppBreakTimer(obj));
         dispatch(setBreak(obj));
     }
        return(
